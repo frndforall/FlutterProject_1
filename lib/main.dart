@@ -32,23 +32,27 @@ final String title ='Sodhan App';
 class HomeScreen extends StatelessWidget {
 
   String _title;
+  int increment =0;
 
   HomeScreen(String title) {
     _title = title;
   }
   Widget build(BuildContext context) {
    return Scaffold(body: Center(child: Column(
-     mainAxisAlignment:MainAxisAlignment.end,
+     mainAxisAlignment:MainAxisAlignment.center,
      children: <Widget>[Text('Welcome to Business App',textDirection: TextDirection.ltr,style:TextStyle(fontSize: 30.0)
      ),
-       Text('Welcome to Business App',
+       Text('Counter is : $increment',
            textDirection: TextDirection.ltr,
           style:TextStyle(fontSize: 24.0)
 
        ),
-       Text('Welcome to Business App',textDirection: TextDirection.ltr,style:TextStyle(fontSize: 20.0))],
+       ],
    )
         ),
+        floatingActionButton: FloatingActionButton(onPressed: () {
+            increment++;
+        },),
           appBar: AppBar(title:Text(_title)),
         );
   }
