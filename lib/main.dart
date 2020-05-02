@@ -10,8 +10,8 @@ final String title ='Sodhan App';
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
+        title: 'Flutter Demo',
+        theme: ThemeData(
         // This is the theme of your application.
         //
         // Try running your application with "flutter run". You'll see the
@@ -22,13 +22,35 @@ final String title ='Sodhan App';
         // Notice that the counter didn't reset back to zero; the application
         // is not restarted.
         primarySwatch: Colors.red,
-      ),
-      home: Scaffold(body: Center(child: Text('Welcome to Business App',textDirection: TextDirection.ltr
-      )),
-      appBar: AppBar(title:Text(title)),
-      )
-      // home: MyHomePage(title: 'Flutter Demo Home Page'),
+    ),
+    home: HomeScreen(title)
     );
+  }
+  }
+
+
+class HomeScreen extends StatelessWidget {
+
+  String _title;
+
+  HomeScreen(String title) {
+    _title = title;
+  }
+  Widget build(BuildContext context) {
+   return Scaffold(body: Center(child: Column(
+     mainAxisAlignment:MainAxisAlignment.end,
+     children: <Widget>[Text('Welcome to Business App',textDirection: TextDirection.ltr,style:TextStyle(fontSize: 30.0)
+     ),
+       Text('Welcome to Business App',
+           textDirection: TextDirection.ltr,
+          style:TextStyle(fontSize: 24.0)
+
+       ),
+       Text('Welcome to Business App',textDirection: TextDirection.ltr,style:TextStyle(fontSize: 20.0))],
+   )
+        ),
+          appBar: AppBar(title:Text(_title)),
+        );
   }
 }
 
@@ -118,3 +140,6 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 }
+
+
+//Text('Welcome to Business App',textDirection: TextDirection.ltr)
