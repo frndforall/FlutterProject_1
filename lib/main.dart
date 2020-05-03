@@ -1,6 +1,7 @@
 
 
 import 'package:flutter/material.dart';
+import 'src/screens/counter_home_screen.dart';
 
 void main() => runApp(MyApp());
 
@@ -29,34 +30,6 @@ final String title ='Sodhan App';
   }
 
 
-class HomeScreen extends StatelessWidget {
-
-  String _title;
-  int increment =0;
-
-  HomeScreen(String title) {
-    _title = title;
-  }
-  Widget build(BuildContext context) {
-   return Scaffold(body: Center(child: Column(
-     mainAxisAlignment:MainAxisAlignment.center,
-     children: <Widget>[Text('Welcome to Business App',textDirection: TextDirection.ltr,style:TextStyle(fontSize: 30.0)
-     ),
-       Text('Counter is : $increment',
-           textDirection: TextDirection.ltr,
-          style:TextStyle(fontSize: 24.0)
-
-       ),
-       ],
-   )
-        ),
-        floatingActionButton: FloatingActionButton(onPressed: () {
-            increment++;
-        },),
-          appBar: AppBar(title:Text(_title)),
-        );
-  }
-}
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
