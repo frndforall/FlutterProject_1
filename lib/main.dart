@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'src/screens/counter_home_screen.dart';
+import 'src/screens/MeetupDetailScreen.dart';
 
 void main() => runApp(MyApp());
 
@@ -24,7 +25,10 @@ final String title ='Sodhan App';
         // is not restarted.
         primarySwatch: Colors.red,
     ),
-    home: HomeScreen(title)
+    home: HomeScreen(title),
+    routes: {
+      '/meetupDetail': (context) => MeetupDetailScreen()
+    },
     );
   }
   }

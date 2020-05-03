@@ -1,7 +1,5 @@
-
-
-
 import 'package:flutter/material.dart';
+import 'package:myhomeapp/widgets/bottom_navigation_design.dart';
 
 
 class HomeScreen extends StatefulWidget{
@@ -10,10 +8,8 @@ class HomeScreen extends StatefulWidget{
     _title = title;
   }
   @override
-  State<StatefulWidget> createState() {
-    
-    return HomeScreenState();
-  }
+  State<StatefulWidget> createState() => HomeScreenState();
+  
 
 }
 
@@ -29,6 +25,7 @@ class HomeScreenState extends State<HomeScreen>   {
             });
             
         }
+
   Widget build(BuildContext context) {
    return Scaffold(body: Center(child: Column(
      mainAxisAlignment:MainAxisAlignment.center,
@@ -39,6 +36,12 @@ class HomeScreenState extends State<HomeScreen>   {
           style:TextStyle(fontSize: 24.0)
 
        ),
+       RaisedButton(
+         child: Text('Go To Details'),
+         onPressed: (){
+           Navigator.pushNamed(context, '/meetupDetail');
+         },
+       )
        ],
    )
         ),
@@ -46,6 +49,8 @@ class HomeScreenState extends State<HomeScreen>   {
         child: Icon(Icons.add),
         tooltip: 'Click to increase'),
           appBar: AppBar(title:Text(widget._title)),
+          bottomNavigationBar: BottomNavigation()
         );
   }
+
 }
