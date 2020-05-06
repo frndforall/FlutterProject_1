@@ -41,6 +41,11 @@ class HomeScreenState extends State<HomeScreen>   {
          onPressed: (){
            Navigator.pushNamed(context, '/meetupDetail');
          },
+       ), RaisedButton(
+         child: Text('Go To Post Screen'),
+         onPressed: (){
+           Navigator.pushNamed(context, '/postDetails');
+         },
        )
        ],
    )
