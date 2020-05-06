@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:myhomeapp/model/post.dart';
 // import 'dart:convert';
 
 class PostScreen extends StatefulWidget {
@@ -15,7 +16,7 @@ class PostScreen extends StatefulWidget {
 }
 
 class _PostScreenState extends State<PostScreen>{
-  List<dynamic> _postlist = [];
+  List<Post> _postlist = [];
 
   @override
   void initState() { 
@@ -27,7 +28,10 @@ class _PostScreenState extends State<PostScreen>{
    http.get('https://jsonplaceholder.typicode.com/posts')
     .then((res){
       // print(res.body);
-      final posts = json.decode(res.body);
+      final List<dynamic> parsedValues = json.decode(res.body);
+      final posts = parsedValues.map((parsedValues){
+          return Post.fromJson(parsedValues);
+      }).toList();
       setState(() {
         _postlist = posts;
       });
@@ -46,9 +50,9 @@ class _PostScreenState extends State<PostScreen>{
 
 class _PostList extends StatelessWidget {
 
-List<dynamic> _postList;
+List<Post> _postList;
 
-_PostList(List<dynamic> list) {
+_PostList(List<Post> list) {
   _postList = list;
 }
 
@@ -63,12 +67,17 @@ _PostList(List<dynamic> list) {
     //                 }).toList()
     //                 );
     return ListView.builder(
-      itemCount: _postList.length,
+      itemCount: _postList.length * 2,
       itemBuilder: (BuildContext context,int i){
+        final index  = i~/2;
+        if( i.isOdd) {
+          return Divider();
+        } else {
                              return ListTile(
-                          title: Text( _postList[i]['title'],textDirection:TextDirection.ltr),
-                          subtitle: Text(_postList[i]['body'],textDirection: TextDirection.ltr),
+                          title: Text( _postList[index].title,textDirection:TextDirection.ltr),
+                          subtitle: Text( _postList[index].body,textDirection: TextDirection.ltr),
                         );
+         }
       }
 
     );
