@@ -1,12 +1,14 @@
-import 'dart:convert';
+
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+
 import 'package:myhomeapp/model/post.dart';
+import 'package:myhomeapp/services/post_api_service.dart';
 // import 'dart:convert';
 
 class PostScreen extends StatefulWidget {
+  PostApiProvider apiProvider = PostApiProvider();
   @override
   State<StatefulWidget> createState() {
     
@@ -24,18 +26,12 @@ class _PostScreenState extends State<PostScreen>{
     getPosts();
   }
 
-  void getPosts() {
-   http.get('https://jsonplaceholder.typicode.com/posts')
-    .then((res){
-      // print(res.body);
-      final List<dynamic> parsedValues = json.decode(res.body);
-      final posts = parsedValues.map((parsedValues){
-          return Post.fromJson(parsedValues);
-      }).toList();
+  void getPosts() async {
+   List<Post> posts = await widget.apiProvider.getPosts();
       setState(() {
         _postlist = posts;
       });
-    });
+  
   }
   @override
   Widget build(BuildContext context) {
@@ -59,13 +55,6 @@ _PostList(List<Post> list) {
 @override
   Widget build(BuildContext context) {
     
-    // return ListView(children: _postList.map((post){
-    //                     return ListTile(
-    //                       title: Text( post['title'],textDirection:TextDirection.ltr),
-    //                       subtitle: Text(post['body'],textDirection: TextDirection.ltr),
-    //                     );
-    //                 }).toList()
-    //                 );
     return ListView.builder(
       itemCount: _postList.length * 2,
       itemBuilder: (BuildContext context,int i){
