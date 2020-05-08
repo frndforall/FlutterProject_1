@@ -1,5 +1,6 @@
 
 
+import 'package:faker/faker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -37,6 +38,11 @@ class _PostScreenState extends State<PostScreen>{
   Widget build(BuildContext context) {
     return Scaffold(body: _PostList(_postlist),
                   appBar: AppBar(title: Text('Post Screen'),),
+                  floatingActionButton: FloatingActionButton(onPressed: () {
+                    setState(() {
+                      _postlist.add(Post(faker.food.dish(),faker.food.cuisine(),faker.randomGenerator.integer(9999)));
+                    });
+                  },tooltip: 'Add Post Lists'),
                   );
   }
 

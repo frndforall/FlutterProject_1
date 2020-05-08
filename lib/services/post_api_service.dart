@@ -19,7 +19,7 @@ class PostApiProvider  {
       final List<dynamic> parsedValues = json.decode(res.body);
       return parsedValues.map((parsedValues){
           return Post.fromJson(parsedValues);
-      }).toList();
+      }).take(3).toList();
      
   }
 
