@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 
 import 'package:myhomeapp/model/post.dart';
 import 'package:myhomeapp/services/post_api_service.dart';
+import 'package:myhomeapp/state/app_state.dart';
+
 // import 'dart:convert';
 
 class PostScreen extends StatefulWidget {
@@ -60,6 +62,7 @@ class _PostList extends StatelessWidget {
 @override
   Widget build(BuildContext context) {
     final post = _InherittedPost.of(context).postList;
+    final appData = AppStore.of(context).testData1;
 
 
     return Scaffold(body:ListView.builder(
@@ -77,7 +80,7 @@ class _PostList extends StatelessWidget {
       }
 
     ),
-                  appBar: AppBar(title: Text('Post Screen'),),
+                  appBar: AppBar(title: Text(appData),),
                   floatingActionButton: _PostButton(),
                   );
     
