@@ -34,16 +34,19 @@ class _PostScreenState extends State<PostScreen>{
       });
   
   }
+
+  _addPost() {
+    final id=faker.randomGenerator.integer(99999);
+    final title = faker.food.dish();
+    final body = faker.food.cuisine();
+    final post = Post(title, body, id);
+    setState(() {
+      _postlist.add(post);
+    });
+  }
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: _PostList(_postlist),
-                  appBar: AppBar(title: Text('Post Screen'),),
-                  floatingActionButton: FloatingActionButton(onPressed: () {
-                    setState(() {
-                      _postlist.add(Post(faker.food.dish(),faker.food.cuisine(),faker.randomGenerator.integer(9999)));
-                    });
-                  },tooltip: 'Add Post Lists'),
-                  );
+    return _InherittedPost(_PostList(),_postlist,_addPost);
   }
 
 }
@@ -52,29 +55,61 @@ class _PostScreenState extends State<PostScreen>{
 
 class _PostList extends StatelessWidget {
 
-List<Post> _postList;
 
-_PostList(List<Post> list) {
-  _postList = list;
-}
 
 @override
   Widget build(BuildContext context) {
-    
-    return ListView.builder(
-      itemCount: _postList.length * 2,
+    final post = _InherittedPost.of(context).postList;
+
+
+    return Scaffold(body:ListView.builder(
+      itemCount: post.length * 2,
       itemBuilder: (BuildContext context,int i){
         final index  = i~/2;
         if( i.isOdd) {
           return Divider();
         } else {
-                             return ListTile(
-                          title: Text( _postList[index].title,textDirection:TextDirection.ltr),
-                          subtitle: Text( _postList[index].body,textDirection: TextDirection.ltr),
-                        );
+              return ListTile(
+                      title: Text( post[index].title,textDirection:TextDirection.ltr),
+                      subtitle: Text( post[index].body,textDirection: TextDirection.ltr),
+                      );
          }
       }
 
-    );
+    ),
+                  appBar: AppBar(title: Text('Post Screen'),),
+                  floatingActionButton: _PostButton(),
+                  );
+    
   }
+
+ 
+}
+ class _PostButton extends StatelessWidget {
+    Widget build(BuildContext context) {
+     return FloatingActionButton(onPressed: (){
+                  _InherittedPost.of(context).createPost();
+                 }
+                  ,tooltip: 'Add Post Lists');
+    }
+}
+
+class _InherittedPost extends InheritedWidget {
+
+  final List<Post> postList;
+  final Function createPost;
+
+  final Widget child;
+
+  _InherittedPost(this.child,this.postList,this.createPost): super(child: child);
+
+  @override
+  bool updateShouldNotify(InheritedWidget oldWidget) {
+    return true;
+  }
+
+  static _InherittedPost of(BuildContext context){
+      return (context.dependOnInheritedWidgetOfExactType<_InherittedPost>());
+  }
+  
 }

@@ -1,11 +1,12 @@
 
 
 import 'package:flutter/material.dart';
+import 'package:myhomeapp/state/app_state.dart';
 import 'src/screens/counter_home_screen.dart';
 import 'src/screens/meetup_detail_screen.dart';
 import 'src/screens/posts_screen.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(AppStore(child: MyApp()));
 
 class MyApp extends StatelessWidget {
 final String title ='Sodhan App';
