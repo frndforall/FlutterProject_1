@@ -1,12 +1,12 @@
 
 
 import 'package:flutter/material.dart';
-import 'package:myhomeapp/state/app_state.dart';
+import 'package:myhomeapp/src/screens/meetup_home_screen.dart';
 import 'src/screens/counter_home_screen.dart';
 import 'src/screens/meetup_detail_screen.dart';
 import 'src/screens/posts_screen.dart';
 
-void main() => runApp(AppStore(child: MyApp()));
+void main() => runApp( MyApp());
 
 class MyApp extends StatelessWidget {
 final String title ='Sodhan App';
@@ -27,8 +27,9 @@ final String title ='Sodhan App';
         // is not restarted.
         primarySwatch: Colors.red,
     ),
-    home: HomeScreen(title),
+   // home: HomeScreen(title),
     // home: PostScreen(),
+    home: MeetUpHomeScreen(),
     routes: {
       '/meetupDetail': (context) => MeetupDetailScreen(),
       '/postDetails': (context) => PostScreen()
