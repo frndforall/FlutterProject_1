@@ -63,7 +63,7 @@ class _MeetupCard extends StatelessWidget {
                   subtitle: Text(details.description),),
                     ButtonBar(children: <Widget>[
                     FlatButton(child: Text('Visit Meetup'), onPressed: () {
-                      Navigator.pushNamed(context, MeetupDetailScreen.route, arguments: MeetupArguments(id: details.id));
+                      Navigator.pushNamed(context, MeetupDetails.route, arguments: MeetupArguments(id: details.id));
                     },),
                     FlatButton(child: Text('Favorite'), onPressed: () {
                       Navigator.pushNamed(context, '/postDetails');

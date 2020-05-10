@@ -37,8 +37,8 @@ final String title ='Sodhan App';
 
     onGenerateRoute:(RouteSettings settings) {
       final MeetupArguments arg = settings.arguments;
-      if(settings.name == MeetupDetailScreen.route) {
-        return MaterialPageRoute(builder: (context) => MeetupDetailScreen(data: arg.id));
+      if(settings.name == MeetupDetails.route) {
+        return MaterialPageRoute(builder: (context) => MeetupDetails(data: arg.id));
       } else {
         return MaterialPageRoute(builder: (context) => PostScreen());
       }
