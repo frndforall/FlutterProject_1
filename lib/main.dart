@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:myhomeapp/src/screens/meetup_home_screen.dart';
 
+// import 'src/screens/counter_home_screen.dart';
 import 'src/screens/meetup_detail_screen.dart';
 import 'src/screens/posts_screen.dart';
 
@@ -27,9 +28,9 @@ final String title ='Sodhan App';
         // is not restarted.
         primarySwatch: Colors.red,
     ),
-   // home: HomeScreen(title),
+  // home: HomeScreen(title: title),
     // home: PostScreen(),
-    home: MeetUpHomeScreen(),
+     home: MeetUpHomeScreen(),
     // routes: {
     //   '/meetupDetail': (context) => MeetupDetailScreen(),
     //   '/postDetails': (context) => PostScreen()
@@ -39,7 +40,9 @@ final String title ='Sodhan App';
       final MeetupArguments arg = settings.arguments;
       if(settings.name == MeetupDetails.route) {
         return MaterialPageRoute(builder: (context) => MeetupDetails(data: arg.id));
-      } else {
+      } else if(settings.name == MeetUpHomeScreen.route) {
+       return MaterialPageRoute(builder: (context) => MeetUpHomeScreen());
+      }else {
         return MaterialPageRoute(builder: (context) => PostScreen());
       }
 

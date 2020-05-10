@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:myhomeapp/src/screens/meetup_home_screen.dart';
+import 'package:myhomeapp/src/screens/posts_screen.dart';
 import 'package:myhomeapp/widgets/bottom_navigation_design.dart';
 
 
 class HomeScreen extends StatefulWidget{
-  String _title;
-  HomeScreen(String title) {
-    _title = title;
-  }
+  final String title;
+  HomeScreen({this.title}); 
   @override
   State<StatefulWidget> createState() => HomeScreenState();
   
@@ -39,12 +39,12 @@ class HomeScreenState extends State<HomeScreen>   {
        RaisedButton(
          child: Text('Go To Details'),
          onPressed: (){
-           Navigator.pushNamed(context, '/meetupDetail');
+           Navigator.pushNamed(context, MeetUpHomeScreen.route);
          },
        ), RaisedButton(
          child: Text('Go To Post Screen'),
          onPressed: (){
-           Navigator.pushNamed(context, '/postDetails');
+           Navigator.pushNamed(context, PostScreen.route);
          },
        )
        ],
@@ -53,7 +53,7 @@ class HomeScreenState extends State<HomeScreen>   {
         floatingActionButton: FloatingActionButton(onPressed: _increment,
         child: Icon(Icons.add),
         tooltip: 'Click to increase'),
-          appBar: AppBar(title:Text(widget._title)),
+          appBar: AppBar(title:Text(widget.title)),
           bottomNavigationBar: BottomNavigation()
         );
   }

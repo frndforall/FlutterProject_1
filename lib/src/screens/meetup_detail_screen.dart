@@ -11,7 +11,7 @@ class MeetupDetails extends StatefulWidget {
   static final String route = '/meetupDetail';
   final String data;
 
-  MeetupApiProvider api =MeetupApiProvider.internal();
+  final MeetupApiProvider api =MeetupApiProvider.internal();
 
 
   MeetupDetails({this.data});
@@ -41,7 +41,7 @@ class MeetupDetailScreen extends State<MeetupDetails>{
   
   buildBody() {
     if(meetup != null) {
-      return Center(child: Column(children: <Widget>[MeetupHeaderSection(meetup: meetup),Text('I am MeetupDetail Widget'),Text(meetup.shortInfo)]),);
+      return Center(child: Column(children: <Widget>[MeetupHeaderSection(meetup: meetup),MeetupTitleSection(meetup: meetup)]),);
 
     } else {
       return Container(width: 0.0,height: 0.0);
@@ -77,5 +77,21 @@ class MeetupHeaderSection extends StatelessWidget {
       title: Text(meetup.title,style: TextStyle(color: Colors.white,fontSize: 20.0,fontWeight: FontWeight.bold)),
       subtitle: Text(meetup.shortInfo,style: TextStyle(color: Colors.white,fontSize: 20.0,fontWeight: FontWeight.bold)),
     )))],);
+  }
+}
+
+class MeetupTitleSection extends StatelessWidget {
+  final Meetup meetup;
+
+  MeetupTitleSection({this.meetup});
+
+  Widget build(BuildContext context) {
+      return Padding(padding: EdgeInsets.all(10.0),
+      child:Row ( children: <Widget>[Expanded(child: Padding(padding: EdgeInsets.all(10.0),  child: Column(crossAxisAlignment: CrossAxisAlignment.start,children: <Widget>[
+          Text(meetup.title,style: TextStyle(color: Colors.black,fontSize: 14.0,fontWeight: FontWeight.bold)),
+          Text(meetup.shortInfo,style: TextStyle(color: Colors.black,fontSize: 14.0,fontWeight: FontWeight.normal))
+        ],),)),
+        Padding(padding: EdgeInsets.all(20.0), child: Row(children: <Widget>[Icon(Icons.people,color: Colors.blue), Text('${meetup.joinedPeopleCount} people')],)
+        )]));
   }
 }

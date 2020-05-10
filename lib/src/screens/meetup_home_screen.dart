@@ -11,8 +11,10 @@ class MeetupArguments {
 }
 
 class MeetUpHomeScreen extends StatefulWidget {
+
+  static final String route = '/meetupHome';
   
-  MeetupApiProvider _api = MeetupApiProvider.internal();
+  final MeetupApiProvider _api = MeetupApiProvider.internal();
 
   @override
   MeetupHome createState() {
@@ -50,7 +52,7 @@ class MeetupHome extends State<MeetUpHomeScreen>{
 }
 
 class _MeetupCard extends StatelessWidget {
-  Meetup details;
+  final Meetup details;
 
   _MeetupCard(this.details);
 
@@ -86,7 +88,7 @@ class Meetuptitle extends StatelessWidget {
 }
 
 class MeetupCardList extends StatelessWidget {
-  List<Meetup> meetups = [];
+  final List<Meetup> meetups;
   MeetupCardList(this.meetups);
   // List<_MeetupCard> _meetupList= [_MeetupCard(),_MeetupCard(),_MeetupCard()];
   Widget build(BuildContext context) {

@@ -30,7 +30,7 @@ class AppStoreState extends State<AppStore> {
 }
 
 class _InherittedAppState extends InheritedWidget {
-  AppStoreState data;
+  final AppStoreState data;
   _InherittedAppState({@required Widget child, this.data}) : super(child: child);
   @override
   bool updateShouldNotify(InheritedWidget oldWidget) {

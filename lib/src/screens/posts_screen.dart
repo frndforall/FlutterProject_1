@@ -14,6 +14,9 @@ import 'package:scoped_model/scoped_model.dart';
 
 class PostScreen extends StatefulWidget {
 
+  static final String route = '/postDetails';
+
+
   @override
   State<StatefulWidget> createState() {
     
