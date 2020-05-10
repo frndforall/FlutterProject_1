@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:myhomeapp/model/meetup.dart';
+import 'package:myhomeapp/services/login_service.dart';
 import 'package:myhomeapp/services/meetup_api_service.dart';
 import 'package:myhomeapp/src/screens/meetup_detail_screen.dart';
 
@@ -79,12 +80,31 @@ class _MeetupCard extends StatelessWidget {
 }
 
 class Meetuptitle extends StatelessWidget {
+
+   final LoginProvider auth = LoginProvider();
+
+  _buildUserWelcome() {
+    final isAuth = auth.isAuthenticated();
+    if (isAuth) {
+      final user = auth.authUser;
+      return Container(
+        child: Text('Welcome ${user.username}')
+      );
+    } else {
+      return Container(width: 0, height: 0);
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Container(
       alignment: Alignment.centerLeft,
       padding: EdgeInsets.all(20.0),
-      child: Text('Featured Meetup',style: TextStyle(fontSize: 23.0,fontWeight: FontWeight.bold)));
+      child:  Column(
+        children: [
+          Text('Featured Meetups', style: TextStyle(fontSize: 22.0, fontWeight: FontWeight.bold)),
+          _buildUserWelcome()
+        ]
+      ));
   }
 }
 
