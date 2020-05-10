@@ -60,7 +60,8 @@ class _MeetupCard extends StatelessWidget {
     return Card(child: Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        ListTile(leading: CircleAvatar(backgroundImage: NetworkImage(details.image)),
+        ListTile(leading: CircleAvatar(radius: 25.0,
+                  backgroundImage: NetworkImage(details.image)),
                   title: Text(details.title),
                   subtitle: Text(details.description),),
                     ButtonBar(children: <Widget>[

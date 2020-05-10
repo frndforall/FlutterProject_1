@@ -41,7 +41,11 @@ class MeetupDetailScreen extends State<MeetupDetails>{
   
   buildBody() {
     if(meetup != null) {
-      return Center(child: Column(children: <Widget>[MeetupHeaderSection(meetup: meetup),MeetupTitleSection(meetup: meetup)]),);
+      return Center(child: Column(children: <Widget>[
+                  MeetupHeaderSection(meetup: meetup),
+                  MeetupTitleSection(meetup: meetup),
+                  InfoSection(meetup: meetup),
+                  Padding(padding: EdgeInsets.all(20.0), child: Text(meetup.description,style: TextStyle(fontSize: 20.0),),)]),);
 
     } else {
       return Container(width: 0.0,height: 0.0);
@@ -94,4 +98,25 @@ class MeetupTitleSection extends StatelessWidget {
         Padding(padding: EdgeInsets.all(20.0), child: Row(children: <Widget>[Icon(Icons.people,color: Colors.blue), Text('${meetup.joinedPeopleCount} people')],)
         )]));
   }
+}
+
+class InfoSection extends StatelessWidget {
+  final Meetup meetup;
+  InfoSection({this.meetup});
+
+  buildColumn(String label,String value) {
+    return Column(children: <Widget>[
+                            Text(label,style: TextStyle(color: Colors.blue,fontWeight: FontWeight.bold,fontSize: 15.0)),
+                            Text(value, style :TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 20.0))
+                          ],);
+  }
+
+  Widget build(BuildContext context) {
+      return Padding(padding: EdgeInsets.all(20.0), 
+                      child: Row(children: <Widget>[Expanded(child: buildColumn('Category', meetup.category.name)),
+                         Expanded(child:buildColumn('From', meetup.timeFrom)),
+                          Expanded(child:buildColumn('To', meetup.timeTo))
+                      ]));
+  }
+
 }
