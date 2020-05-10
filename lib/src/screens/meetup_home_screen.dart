@@ -83,12 +83,14 @@ class Meetuptitle extends StatelessWidget {
 
    final LoginProvider auth = LoginProvider();
 
-  _buildUserWelcome() {
+  Future<Widget> _buildUserWelcome() async {
     final isAuth = auth.isAuthenticated();
+  
     if (isAuth) {
       final user = auth.authUser;
       return Container(
-        child: Text('Welcome ${user.username}')
+        child: Row(children: <Widget>[CircleAvatar(backgroundImage: NetworkImage(user.avatar),),
+                Text('Welcome ${user.username}')],)
       );
     } else {
       return Container(width: 0, height: 0);
@@ -100,6 +102,7 @@ class Meetuptitle extends StatelessWidget {
       alignment: Alignment.centerLeft,
       padding: EdgeInsets.all(20.0),
       child:  Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text('Featured Meetups', style: TextStyle(fontSize: 22.0, fontWeight: FontWeight.bold)),
           _buildUserWelcome()

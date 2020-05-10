@@ -11,7 +11,7 @@ import 'package:myhomeapp/utils/validator.dart';
 class LoginScreen extends StatefulWidget {
   static final String route='/loginscreen';
 
-  LoginProvider api = LoginProvider();
+  final LoginProvider api = LoginProvider();
   
   LoginScreenState createState() => LoginScreenState();
 

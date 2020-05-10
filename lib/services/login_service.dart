@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'dart:io' show Platform;
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:myhomeapp/model/login_form_data.dart';
 import 'package:myhomeapp/model/user.dart';
@@ -19,8 +20,21 @@ class LoginProvider {
   }
 
   LoginProvider.internal();
+ Future<String> get token async {
+    if (_token.isNotEmpty) {
+      return _token;
+    } else {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      return prefs.getString('token');
+    }
+  }
 
-   bool _saveToken(String token) {
+  Future<bool> _persistToken(token) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.setString('token', token);
+  }
+
+  Future<bool> _saveToken(String token) async {
     if (token != null) {
       _token = token;
       return true;
@@ -34,7 +48,7 @@ class LoginProvider {
   }
 
     bool isAuthenticated() {
-    if (_token.isNotEmpty) {
+    if (_token!=null && _token.isNotEmpty) {
       return true;
     }
 
