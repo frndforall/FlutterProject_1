@@ -84,6 +84,20 @@ class AuthProvider {
     }
   }
 
+   Future<bool> register(RegisterFormData data) async {
+     print(data.toJSON());
+    final body = json.encode(data.toJSON());
+    final res = await http.post('$baseUrl/users/register', 
+    headers: {"Content-type":"application/json"},
+    body: body);
+    final parsedData = Map<String,dynamic>.from(json.decode(res.body));
+    if(res.statusCode == 200) {
+      return true;
+    } else {
+      return Future.error(parsedData);
+    }
+  }
+
   Future<bool> logoutUser() async{
     try{
      await _removeUserDetails();

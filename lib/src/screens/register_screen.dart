@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:myhomeapp/model/login_form_data.dart';
+import 'package:myhomeapp/services/auth_service.dart';
 import 'package:myhomeapp/src/screens/login_screen.dart';
 import 'package:myhomeapp/src/screens/meetup_home_screen.dart';
 import 'package:myhomeapp/utils/constants.dart';
@@ -21,15 +22,20 @@ class RegisterScreenState extends State<RegisterScreen> {
   final GlobalKey<FormState> _registerform = GlobalKey<FormState>();
   RegisterFormData formData = RegisterFormData();
   bool _autoValidator = false;
+  BuildContext _scaffoldContext;
+
+  AuthProvider provider = AuthProvider();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      
       appBar: AppBar(
         title: Text('Register')
       ),
       body: Builder(
         builder: (context) {
+          _scaffoldContext= context;
           return Padding(
             padding: EdgeInsets.all(20.0),
             child: Form(
@@ -65,7 +71,7 @@ class RegisterScreenState extends State<RegisterScreen> {
                                    [requiredValidator]);
                   
                       },
-                      onSaved: (value) {formData.name = value;},
+                      onSaved: (value) {formData.username = value;},
                   ),
                   TextFormField(
                     style: Theme.of(context).textTheme.headline,
@@ -92,6 +98,9 @@ class RegisterScreenState extends State<RegisterScreen> {
                                    'user name',
                                    [requiredValidator]);
                     },
+                    onSaved: (value) {
+                      formData.avatar = value;
+                    },
                     keyboardType: TextInputType.url
                   ),
                   TextFormField(
@@ -113,7 +122,14 @@ class RegisterScreenState extends State<RegisterScreen> {
                     style: Theme.of(context).textTheme.headline,
                     decoration: InputDecoration(
                       hintText: 'Password Confirmation',
-                    ),
+                    ), validator: (value) {
+                       return composeValidators(value,
+                                   'user name',
+                                   [requiredValidator,minLengthValidator]);
+                    },
+                    onSaved: (value) {
+                      formData.passwordConfirmation = value;
+                    },
                     obscureText: true,
                   ),
                   _buildLinksSection(),
@@ -157,11 +173,20 @@ class RegisterScreenState extends State<RegisterScreen> {
   _registerUser() {
     final form = _registerform.currentState;
     if(form.validate()) {
-        // final email = _emailKey.currentState.value;
-        // final pass = _passwordKey.currentState.value;
         form.save();
-        print('Name of user is ${formData.name} and email is ${formData.email}');
-        // register();  
+        provider.register(formData).then((value) {
+          if(value) {
+              print('Registered sucessful');
+          } else {
+            print('failed to register');
+          }
+          Navigator.pushNamedAndRemoveUntil(context, LoginScreen.route, (Route<dynamic> route) => false);
+        }).catchError((error) {
+          // print(error);
+           Scaffold.of(_scaffoldContext).showSnackBar(SnackBar(
+          content: Text(error['errors']['message'])
+        ));
+        });
         
     } else {
       setState((){
