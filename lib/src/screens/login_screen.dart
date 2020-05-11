@@ -1,7 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:myhomeapp/model/login_form_data.dart';
-import 'package:myhomeapp/services/login_service.dart';
+import 'package:myhomeapp/services/auth_service.dart';
 import 'package:myhomeapp/src/screens/meetup_home_screen.dart';
 import 'package:myhomeapp/src/screens/register_screen.dart';
 import 'package:myhomeapp/utils/validator.dart';
@@ -11,7 +11,7 @@ import 'package:myhomeapp/utils/validator.dart';
 class LoginScreen extends StatefulWidget {
   static final String route='/loginscreen';
 
-  final LoginProvider api = LoginProvider();
+  final AuthProvider api = AuthProvider();
   
   LoginScreenState createState() => LoginScreenState();
 

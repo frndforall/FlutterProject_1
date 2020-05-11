@@ -2,8 +2,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:myhomeapp/model/meetup.dart';
-import 'package:myhomeapp/services/login_service.dart';
+import 'package:myhomeapp/services/auth_service.dart';
+
 import 'package:myhomeapp/services/meetup_api_service.dart';
+import 'package:myhomeapp/src/screens/login_screen.dart';
 import 'package:myhomeapp/src/screens/meetup_detail_screen.dart';
 
 class MeetupArguments {
@@ -81,21 +83,42 @@ class _MeetupCard extends StatelessWidget {
 
 class Meetuptitle extends StatelessWidget {
 
-   final LoginProvider auth = LoginProvider();
+   final AuthProvider auth = AuthProvider();
 
-  Future<Widget> _buildUserWelcome() async {
-    final isAuth = auth.isAuthenticated();
-  
-    if (isAuth) {
-      final user = auth.authUser;
-      return Container(
-        child: Row(children: <Widget>[CircleAvatar(backgroundImage: NetworkImage(user.avatar),),
-                Text('Welcome ${user.username}')],)
-      );
-    } else {
-      return Container(width: 0, height: 0);
-    }
+  Widget _buildUserWelcome()  {
+    return FutureBuilder<bool>(
+      future: auth.isAuthenticated(),
+      builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+        if (snapshot.hasData && snapshot.data) {
+          final user = auth.authUser;
+          return Container(
+            margin: EdgeInsets.only(top: 10.0),
+            child: Row(
+              children: <Widget>[
+                user.avatar != null
+                  ? CircleAvatar(
+                      backgroundImage: NetworkImage(user.avatar),
+                    )
+                  : Container(width: 0, height: 0),
+                Text('Welcome ${user.username}'), Spacer(),
+                Padding(padding: EdgeInsets.only(left: 20.0),   
+                  child: GestureDetector(child: Text('Logout'),onTap: () {
+                    auth.logoutUser().then((value) {
+                        Navigator.pushNamedAndRemoveUntil(context, LoginScreen.route, (Route<dynamic> route) => false);
+                    });
+                   
+                  
+                },))
+              ],
+            )
+          );
+        } else {
+          return Container(width: 0, height: 0);
+        }
+      },
+    );
   }
+
   @override
   Widget build(BuildContext context) {
     return Container(

@@ -1,27 +1,28 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
+import 'package:myhomeapp/utils/jwt_utils.dart';
 import 'dart:io' show Platform;
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:myhomeapp/model/login_form_data.dart';
 import 'package:myhomeapp/model/user.dart';
 
-class LoginProvider {
+class AuthProvider {
   
   final String baseUrl = Platform.isAndroid?'http://10.0.2.2:3001/api/v1':'http://localhost:3001/api/v1';
   String _token;
   User _authUser;
   
-  static final LoginProvider provider= LoginProvider.internal();
+  static final AuthProvider provider= AuthProvider.internal();
 
-  factory LoginProvider() {
+  factory AuthProvider() {
     return provider;
   }
 
-  LoginProvider.internal();
+  AuthProvider.internal();
  Future<String> get token async {
-    if (_token.isNotEmpty) {
+    if (_token!=null && _token.isNotEmpty) {
       return _token;
     } else {
       SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -37,6 +38,7 @@ class LoginProvider {
   Future<bool> _saveToken(String token) async {
     if (token != null) {
       _token = token;
+      await _persistToken(token);
       return true;
     }
 
@@ -47,13 +49,21 @@ class LoginProvider {
     _authUser = User.fromJSON(value);
   }
 
-    bool isAuthenticated() {
-    if (_token!=null && _token.isNotEmpty) {
-      return true;
+   Future<bool> isAuthenticated() async {
+    final token = await this.token;
+    if (token.isNotEmpty) {
+      final decodeToken = decode(token);
+      final expiry = decodeToken['exp'] * 1000;
+      final isValidToken = (expiry>DateTime.now().millisecond);
+      
+      if(isValidToken) {
+        authUser = decodeToken;
+        print('token is validated with $expiry');
+      }
+      return isValidToken;
     }
-
     return false;
-  }
+   }
 
   get authUser => _authUser;
 
@@ -74,6 +84,23 @@ class LoginProvider {
     }
   }
 
+  Future<bool> logoutUser() async{
+    try{
+     await _removeUserDetails();
+     return true;
+    }catch(error) {
+      print(error);
+      return false;
+    }
+
+  }
+
+  _removeUserDetails() async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.remove('token');
+    _token = '';
+    authUser=null;
+  }
 
 
 }
