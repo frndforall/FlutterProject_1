@@ -1,11 +1,14 @@
 
 
 import 'package:flutter/material.dart';
+import 'package:myhomeapp/src/blocs/bloc_provider.dart';
+import 'package:myhomeapp/src/blocs/meetup_bloc.dart';
 import 'package:myhomeapp/src/screens/login_screen.dart';
 import 'package:myhomeapp/src/screens/meetup_home_screen.dart';
 import 'package:myhomeapp/src/screens/register_screen.dart';
 
 // import 'src/screens/counter_home_screen.dart';
+import 'src/blocs/counter_bloc.dart';
 import 'src/screens/counter_home_screen.dart';
 import 'src/screens/meetup_detail_screen.dart';
 import 'src/screens/posts_screen.dart';
@@ -31,7 +34,14 @@ final String title ='Sodhan App';
         // is not restarted.
         primarySwatch: Colors.red,
     ),
-    home: HomeScreen(title: title),
+    home: CounterBlocProvider(
+        child: Builder(
+          builder: (BuildContext context) {
+            return HomeScreen(title: title,
+                                      counterBloc: CounterBlocProvider.of(context));
+          }
+        )
+      ),
     // home: PostScreen(),
     //  home: LoginScreen(''),
     routes: {
@@ -44,7 +54,11 @@ final String title ='Sodhan App';
         final MeetupArguments arg = settings.arguments;
         return MaterialPageRoute(builder: (context) => MeetupDetails(data: arg?.id));
       } else if(settings.name == MeetUpHomeScreen.route) {
-       return MaterialPageRoute(builder: (context) => MeetUpHomeScreen());
+       return MaterialPageRoute(builder: (context) => BlocProvider<MeetupBloc>(
+            bloc: MeetupBloc(),
+            child: MeetUpHomeScreen(),
+        ));
+       
       } else if(settings.name == LoginScreen.route) {
         final LoginArguments arg = settings.arguments;
         return MaterialPageRoute(builder: (context) => LoginScreen(arg?.message));

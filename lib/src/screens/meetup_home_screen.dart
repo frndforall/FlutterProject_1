@@ -1,12 +1,13 @@
 
 
 import 'package:flutter/material.dart';
-import 'package:myhomeapp/model/meetup.dart';
-import 'package:myhomeapp/services/auth_service.dart';
-
-import 'package:myhomeapp/services/meetup_api_service.dart';
+import 'package:myhomeapp/src/blocs/bloc_provider.dart';
+import 'package:myhomeapp/src/blocs/meetup_bloc.dart';
+import 'package:myhomeapp/src/model/meetup.dart';
 import 'package:myhomeapp/src/screens/login_screen.dart';
 import 'package:myhomeapp/src/screens/meetup_detail_screen.dart';
+import 'package:myhomeapp/src/services/auth_service.dart';
+import 'package:myhomeapp/src/services/meetup_api_service.dart';
 
 class MeetupArguments {
   final String id;
@@ -16,8 +17,6 @@ class MeetupArguments {
 class MeetUpHomeScreen extends StatefulWidget {
 
   static final String route = '/meetupHome';
-  
-  final MeetupApiProvider _api = MeetupApiProvider.internal();
 
   @override
   MeetupHome createState() {
@@ -27,25 +26,22 @@ class MeetUpHomeScreen extends StatefulWidget {
 }
 
 class MeetupHome extends State<MeetUpHomeScreen>{
-  List<Meetup> meetups = [];
-  @override
-  void initState() {
-    super.initState();
-    _fetchPost();
-  }
-
-  _fetchPost() async {
-    meetups =await widget._api.getMeetups();
-    setState(() {
-      this.meetups = meetups;
-    });
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    BlocProvider.of<MeetupBloc>(context).fetchMeetups();
+    // final meetups =BlocProvider.of<MeetupBloc>(context);
+    // meetups.fetchMeetups();
+    // meetups.meetups.listen((data) {
+    //       print(data);
+    // });
+    
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(body: Center(child: Column(children: <Widget>[
     Meetuptitle(),
-    MeetupCardList(meetups)
+    MeetupCardList()
         ]),
 
       ),
@@ -135,22 +131,31 @@ class Meetuptitle extends StatelessWidget {
 }
 
 class MeetupCardList extends StatelessWidget {
-  final List<Meetup> meetups;
-  MeetupCardList(this.meetups);
-  // List<_MeetupCard> _meetupList= [_MeetupCard(),_MeetupCard(),_MeetupCard()];
-  Widget build(BuildContext context) {
-    return Expanded(child:  ListView.builder(
-      itemCount: meetups.length*2,
-      itemBuilder: (BuildContext context,int i){
-        final index  = i~/2;
-            if( i.isOdd) {
-              return Divider();
-               } else {
-              return _MeetupCard(meetups[index]);
-                }
-              }
 
-          )
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: StreamBuilder<List<Meetup>>(
+        stream: BlocProvider.of<MeetupBloc>(context).meetups,
+        initialData: [],
+        builder: (BuildContext context, AsyncSnapshot<List<Meetup>> snapshot){
+          final meetups = snapshot.data;
+            return ListView.builder(
+                itemCount: meetups.length*2,
+                itemBuilder: (BuildContext context,int i){
+                  final index  = i~/2;
+                      if( i.isOdd) {
+                        return Divider();
+                        } else {
+                        return _MeetupCard(meetups[index]);
+                          }
+                        }
+
+                    );
+        },
+        
+        
+        )
+      
     );
   }
 }

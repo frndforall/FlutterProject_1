@@ -1,14 +1,16 @@
-import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:myhomeapp/src/blocs/counter_bloc.dart';
 import 'package:myhomeapp/src/screens/meetup_home_screen.dart';
 import 'package:myhomeapp/src/screens/posts_screen.dart';
-import 'package:myhomeapp/widgets/bottom_navigation_design.dart';
+import 'package:myhomeapp/src/widgets/bottom_navigation_design.dart';
+
 
 
 class HomeScreen extends StatefulWidget{
   final String title;
-  HomeScreen({this.title}); 
+  CounterBloc counterBloc;
+  HomeScreen({this.title, this.counterBloc});
   @override
   State<StatefulWidget> createState() => HomeScreenState();
   
@@ -16,36 +18,21 @@ class HomeScreen extends StatefulWidget{
 }
 
 class HomeScreenState extends State<HomeScreen>   {
-  final StreamController<int> _streamController = StreamController<int>();
-  final StreamController<int> _counterController = StreamController<int>.broadcast();
-
-  int increment =0;
-
-  @override
-  initState() {
-    super.initState();
-    _streamController.stream.listen((data) {
-        increment = increment + data;
-        _counterController.sink.add(increment);
-        print(increment);
-    });
-  }
 
   @override
   dispose() {
-    _streamController.close();
-    _counterController.close();
+   widget.counterBloc.dispose();
     super.dispose();
   }
 
+  didChangeDependencies() {
+    super.didChangeDependencies();
+    //counterBloc = CounterBlocProvider.of(context);
+  }
+
   _increment() {
-            // increment++;
-            // setState(() {
-            //     increment++;
-            // });
-            _streamController.sink.add(10);
-            
-        }
+        widget.counterBloc.incrementer(15); 
+      }
 
   Widget build(BuildContext context) {
    return Scaffold(body: Center(child: Column(
@@ -53,7 +40,7 @@ class HomeScreenState extends State<HomeScreen>   {
      children: <Widget>[Text('Welcome to Business App',textDirection: TextDirection.ltr,style:TextStyle(fontSize: 30.0)
      ),
 
-      StreamBuilder(stream: _counterController.stream,
+      StreamBuilder(stream: widget.counterBloc.counterstream,
       builder: (BuildContext context, AsyncSnapshot<int>  snapshot) {
           if(snapshot.hasData) {
             return Text('Counter is : ${snapshot.data}',
@@ -68,7 +55,7 @@ class HomeScreenState extends State<HomeScreen>   {
           }
       },),
        RaisedButton(
-         child:  StreamBuilder(stream: _counterController.stream,
+         child:  StreamBuilder(stream: widget.counterBloc.counterstream,
       builder: (BuildContext context, AsyncSnapshot<int>  snapshot) {
           if(snapshot.hasData) {
             return Text('Counter is : ${snapshot.data}',

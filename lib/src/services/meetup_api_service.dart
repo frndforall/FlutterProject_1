@@ -2,7 +2,8 @@ import 'package:http/http.dart' as http;
 import 'dart:io' show Platform;
 import 'dart:convert';
 
-import 'package:myhomeapp/model/meetup.dart';
+import 'package:myhomeapp/src/model/meetup.dart';
+
 
 class MeetupApiProvider  {
 

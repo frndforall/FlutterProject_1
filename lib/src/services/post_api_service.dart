@@ -1,6 +1,7 @@
 import 'package:http/http.dart' as http;
-import 'package:myhomeapp/model/post.dart';
 import 'dart:convert';
+
+import 'package:myhomeapp/src/model/post.dart';
 
 class PostApiProvider  {
 

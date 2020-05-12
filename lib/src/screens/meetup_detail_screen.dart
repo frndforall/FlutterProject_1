@@ -1,10 +1,11 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:myhomeapp/model/meetup.dart';
-import 'package:myhomeapp/services/meetup_api_service.dart';
+import 'package:myhomeapp/src/model/meetup.dart';
 
-import 'package:myhomeapp/widgets/bottom_navigation_design.dart';
+import 'package:myhomeapp/src/services/meetup_api_service.dart';
+import 'package:myhomeapp/src/widgets/bottom_navigation_design.dart';
+
 
 
 class MeetupDetails extends StatefulWidget {

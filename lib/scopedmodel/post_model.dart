@@ -1,8 +1,9 @@
 
 
 import 'package:faker/faker.dart';
-import 'package:myhomeapp/model/post.dart';
-import 'package:myhomeapp/services/post_api_service.dart';
+import 'package:myhomeapp/src/model/post.dart';
+
+import 'package:myhomeapp/src/services/post_api_service.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 class PostModel extends Model {

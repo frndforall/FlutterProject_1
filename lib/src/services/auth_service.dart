@@ -1,12 +1,11 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
+import 'package:myhomeapp/src/model/login_form_data.dart';
+import 'package:myhomeapp/src/model/user.dart';
 import 'package:myhomeapp/utils/jwt_utils.dart';
 import 'dart:io' show Platform;
 import 'package:shared_preferences/shared_preferences.dart';
-
-import 'package:myhomeapp/model/login_form_data.dart';
-import 'package:myhomeapp/model/user.dart';
 
 class AuthProvider {
   
