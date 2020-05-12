@@ -4,28 +4,47 @@ import 'package:myhomeapp/model/login_form_data.dart';
 import 'package:myhomeapp/services/auth_service.dart';
 import 'package:myhomeapp/src/screens/meetup_home_screen.dart';
 import 'package:myhomeapp/src/screens/register_screen.dart';
+
 import 'package:myhomeapp/utils/validator.dart';
 
 // import 'register_screen.dart';
 
+class LoginArguments{
+  String message = '';
+  LoginArguments(this.message);
+}
+
 class LoginScreen extends StatefulWidget {
   static final String route='/loginscreen';
-
+  final String message;
   final AuthProvider api = AuthProvider();
   
+  LoginScreen(this.message);
   LoginScreenState createState() => LoginScreenState();
 
 }
 
 class LoginScreenState extends State<LoginScreen> {
 
-BuildContext _scaffoldContext;
+  BuildContext _scaffoldContext;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final GlobalKey<FormFieldState<String>> _passwordKey = GlobalKey<FormFieldState<String>>();
   final GlobalKey<FormFieldState<String>> _emailKey = GlobalKey<FormFieldState<String>>();
-LoginFormData formData = LoginFormData();
+  LoginFormData formData = LoginFormData();
 
   bool _autovalidate = false;
+  @override
+  initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) => _checkMessage());
+  }
+
+  void _checkMessage() {
+    if(widget.message!=null && widget.message.isNotEmpty) {
+      Scaffold.of(_scaffoldContext).showSnackBar(SnackBar(content : Text(widget.message)));
+    }
+  }
+
   Widget build(BuildContext context) {
    
       return Scaffold(body: Builder(builder: (context) {

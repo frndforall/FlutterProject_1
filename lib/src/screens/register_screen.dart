@@ -180,7 +180,7 @@ class RegisterScreenState extends State<RegisterScreen> {
           } else {
             print('failed to register');
           }
-          Navigator.pushNamedAndRemoveUntil(context, LoginScreen.route, (Route<dynamic> route) => false);
+          Navigator.pushNamedAndRemoveUntil(context, LoginScreen.route, (Route<dynamic> route) => false, arguments: LoginArguments(Constants.loginArguments));
         }).catchError((error) {
           // print(error);
            Scaffold.of(_scaffoldContext).showSnackBar(SnackBar(

@@ -6,6 +6,7 @@ import 'package:myhomeapp/src/screens/meetup_home_screen.dart';
 import 'package:myhomeapp/src/screens/register_screen.dart';
 
 // import 'src/screens/counter_home_screen.dart';
+import 'src/screens/counter_home_screen.dart';
 import 'src/screens/meetup_detail_screen.dart';
 import 'src/screens/posts_screen.dart';
 
@@ -30,20 +31,23 @@ final String title ='Sodhan App';
         // is not restarted.
         primarySwatch: Colors.red,
     ),
-  // home: HomeScreen(title: title),
+    home: HomeScreen(title: title),
     // home: PostScreen(),
-     home: LoginScreen(),
+    //  home: LoginScreen(''),
     routes: {
-      LoginScreen.route: (context) => LoginScreen(),
       RegisterScreen.route: (context) => RegisterScreen()
     },
 
     onGenerateRoute:(RouteSettings settings) {
-      final MeetupArguments arg = settings.arguments;
+      
       if(settings.name == MeetupDetails.route) {
-        return MaterialPageRoute(builder: (context) => MeetupDetails(data: arg.id));
+        final MeetupArguments arg = settings.arguments;
+        return MaterialPageRoute(builder: (context) => MeetupDetails(data: arg?.id));
       } else if(settings.name == MeetUpHomeScreen.route) {
        return MaterialPageRoute(builder: (context) => MeetUpHomeScreen());
+      } else if(settings.name == LoginScreen.route) {
+        final LoginArguments arg = settings.arguments;
+        return MaterialPageRoute(builder: (context) => LoginScreen(arg?.message));
       } else {
         return MaterialPageRoute(builder: (context) => PostScreen());
       }
