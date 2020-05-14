@@ -1,6 +1,7 @@
 
 import 'dart:async';
 
+import 'package:rxdart/rxdart.dart';
 import 'package:myhomeapp/src/blocs/bloc_provider.dart';
 import 'package:myhomeapp/src/services/auth_service.dart';
 
@@ -14,7 +15,7 @@ export 'events.dart';
 class AuthBloc extends BlocBase {
   final AuthProvider provider;
 
-  final StreamController<AuthenticationState> stateController = StreamController<AuthenticationState>();
+  final BehaviorSubject<AuthenticationState> stateController = BehaviorSubject<AuthenticationState>();
 
   Stream<AuthenticationState> get stateStream => stateController.stream;
   Sink<AuthenticationState> get _stateSink => stateController.sink;
@@ -30,15 +31,15 @@ class AuthBloc extends BlocBase {
 
   Stream<AuthenticationState> _authStream(AuthenticationEvent event) async* {
     if (event is AppStarted) {
-      // Check if user is authenticated
-      final bool isAuth = await provider.isAuthenticated();
-      if (isAuth) {
-        print(event);
-        yield AuthenticationAuthenticated();
-      } else {
-        yield AuthenticationUnauthenticated();
-      }
-
+        // Check if user is authenticated
+        final bool isAuth = await provider.isAuthenticated();
+        if (isAuth) {
+          print(event);
+          yield AuthenticationAuthenticated();
+        } else {
+          yield AuthenticationUnauthenticated();
+        }
+    }
       if (event is InitLogging) {
         yield AuthenticationLoading();
       }
@@ -50,7 +51,7 @@ class AuthBloc extends BlocBase {
       if (event is LoggedOut) {
         yield AuthenticationUnauthenticated();
       }
-    }
+  
   }
 
   dispose() {

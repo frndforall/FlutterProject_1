@@ -3,6 +3,7 @@ import 'dart:io' show Platform;
 import 'dart:convert';
 
 import 'package:myhomeapp/src/model/meetup.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 class MeetupApiProvider  {
@@ -33,6 +34,33 @@ class MeetupApiProvider  {
       final res= await  http.get('$baseUrl/meetups/$id');
       final  parserValue = json.decode(res.body);
       return Meetup.fromJSON(parserValue);
+  }
+
+
+  Future<bool> joinMeetup(String meetupId) async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      final token = prefs.getString('token');
+
+      await http.post('$baseUrl/meetups/$meetupId/join',
+                      headers: {'Authorization': 'Bearer $token'});
+      return true;
+    } catch(e) {
+      throw Exception('Cannot join meetup!');
+    }
+  }
+
+  Future<bool> leaveMeetup(String meetupId) async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      final token = prefs.getString('token');
+
+      await http.post('$baseUrl/meetups/$meetupId/leave',
+                      headers: {'Authorization': 'Bearer $token'});
+      return true;
+    } catch(e) {
+      throw Exception('Cannot leave meetup!');
+    }
   }
 
 }

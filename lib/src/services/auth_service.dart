@@ -55,10 +55,10 @@ class AuthProvider {
       final expiry = decodeToken['exp'] * 1000;
       final isValidToken = (expiry>DateTime.now().millisecond);
       
-      if(isValidToken) {
-        authUser = decodeToken;
-        print('token is validated with $expiry');
-      }
+      // if(isValidToken) {
+      //   authUser = decodeToken;
+      //   print('token is validated with $expiry');
+      // }
       return isValidToken;
     }
     return false;

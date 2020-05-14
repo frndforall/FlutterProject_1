@@ -3,9 +3,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:myhomeapp/src/blocs/bloc_provider.dart';
 import 'package:myhomeapp/src/blocs/meetup_bloc.dart';
+import 'package:myhomeapp/src/blocs/user_blocs/user_bloc.dart';
 import 'package:myhomeapp/src/model/meetup.dart';
-import 'package:myhomeapp/src/services/auth_service.dart';
-import 'package:myhomeapp/src/widgets/bottom_navigation_design.dart';
+
 
 
 
@@ -14,30 +14,45 @@ class MeetupDetails extends StatefulWidget {
   final String data;
   MeetupDetails({this.data});
   @override
-  MeetupDetailScreen createState() {
-    return MeetupDetailScreen();
-  }
+  _MeetupDetailScreen createState() => _MeetupDetailScreen();
 }
 
-class MeetupDetailScreen extends State<MeetupDetails>{
+class _MeetupDetailScreen extends State<MeetupDetails>{
+  MeetupBloc _meetupBloc;
+  UserBloc _userBloc;
+  Meetup _meetup;
 
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    BlocProvider.of<MeetupBloc>(context).fetchMeetupDetails(widget.data); 
+@override
+  void initState() {
+    _meetupBloc =BlocProvider.of<MeetupBloc>(context);
+    _userBloc = BlocProvider.of<UserBloc>(context);
+    _meetupBloc.fetchMeetupDetails(widget.data); 
+    _meetupBloc.meetup.listen((meetup) {
+      _userBloc.dispatch(CheckUserPermissionsOnMeetup(meetup: meetup));
+    });
+    super.initState();
+  }
+
+  _joinedMeetup() {
+    _meetupBloc.joinMeetup(_meetup);
+  }
+
+  _leaveMeetup() {
+   _meetupBloc.leaveMeetup(_meetup);
   }
 
   buildBody() {
-    return StreamBuilder<Meetup>(stream: BlocProvider.of<MeetupBloc>(context).meetup ,
+    return StreamBuilder<Meetup>(stream: _meetupBloc.meetup ,
                                   initialData: null,
                                   builder: (BuildContext context, AsyncSnapshot<Meetup> snapshot){
-                                    final meetup = snapshot.data;
-                                     if(meetup != null) {
-                                       print(meetup.category);
+                                    _meetup = snapshot.data;
+                                     if(_meetup != null) {
+                                       print(_meetup.category);
                                           return Center(child: Column(children: <Widget>[
-                                                      MeetupHeaderSection(meetup: meetup),
-                                                      MeetupTitleSection(meetup: meetup),
-                                                      InfoSection(meetup: meetup),
-                                                      Padding(padding: EdgeInsets.all(20.0), child: Text(meetup.description,style: TextStyle(fontSize: 20.0),),)]),);
+                                                      MeetupHeaderSection(meetup: _meetup),
+                                                      MeetupTitleSection(meetup: _meetup),
+                                                      InfoSection(meetup: _meetup),
+                                                      Padding(padding: EdgeInsets.all(20.0), child: Text(_meetup.description,style: TextStyle(fontSize: 20.0),),)]),);
 
                                         } else {
                                           print('initial data is null');
@@ -49,12 +64,23 @@ class MeetupDetailScreen extends State<MeetupDetails>{
   
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body:buildBody(),
-      appBar:AppBar(title:Text('Meetup Details')),
-      floatingActionButton: _MeetupActionButton(),
-    );
-  }
+    return StreamBuilder<UserState>(stream: _userBloc.stateStream,
+                              initialData: UserInitialState() ,
+                              builder: (BuildContext context,AsyncSnapshot<UserState> snapshot){
+                                final userState = snapshot.data;
+                                return Scaffold(
+                                          body:buildBody(),
+                                          appBar:AppBar(title:Text('Meetup Details')),
+                                          floatingActionButton: _MeetupActionButton(userState: userState,joinedMeetup:_joinedMeetup,leaveMeetup:_leaveMeetup)
+                                        );
+                              });
+                              
+}
+    
+    
+    
+    
+  
 
 }
 
@@ -116,34 +142,33 @@ class InfoSection extends StatelessWidget {
 
 
 class _MeetupActionButton extends StatelessWidget {
-  final AuthProvider auth = AuthProvider();
 
+final UserState userState;
+final Function() joinedMeetup;
+final Function() leaveMeetup;
+
+_MeetupActionButton({this.userState,this.joinedMeetup,this.leaveMeetup});
   Widget build(BuildContext context) {
-    return FutureBuilder<bool>(
-      future: auth.isAuthenticated(),
-      builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-        if (snapshot.hasData && snapshot.data) {
-          // TODO: Check if user is meetup owner and check if user is already member
-          final isMember = false;
-          if (isMember) {
+    if (userState is UserIsMember) {
             return FloatingActionButton(
-              onPressed: () {},
+              onPressed: () {
+                leaveMeetup();
+              },
               child: Icon(Icons.cancel),
               backgroundColor: Colors.red,
               tooltip: 'Leave Meetup',
             );
-          } else {
+          } else if(userState is UserIsNotMember) {
             return FloatingActionButton(
-              onPressed: () {},
+              onPressed: () {
+                joinedMeetup();
+              },
               child: Icon(Icons.person_add),
               backgroundColor: Colors.green,
               tooltip: 'Join Meetup',
             );
-          }
-        } else {
+          } else {
           return Container(width: 0, height: 0);
         }
-      },
-    );
   }
 }

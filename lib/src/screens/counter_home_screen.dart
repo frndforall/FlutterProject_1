@@ -9,7 +9,7 @@ import 'package:myhomeapp/src/widgets/bottom_navigation_design.dart';
 
 class HomeScreen extends StatefulWidget{
   final String title;
-  CounterBloc counterBloc;
+  final CounterBloc counterBloc;
   HomeScreen({this.title, this.counterBloc});
   @override
   State<StatefulWidget> createState() => HomeScreenState();

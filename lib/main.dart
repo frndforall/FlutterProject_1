@@ -4,14 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:myhomeapp/src/auth/auth_bloc.dart';
 import 'package:myhomeapp/src/blocs/bloc_provider.dart';
 import 'package:myhomeapp/src/blocs/meetup_bloc.dart';
+import 'package:myhomeapp/src/blocs/user_blocs/user_bloc.dart';
 import 'package:myhomeapp/src/screens/login_screen.dart';
 import 'package:myhomeapp/src/screens/meetup_home_screen.dart';
 import 'package:myhomeapp/src/screens/register_screen.dart';
 import 'package:myhomeapp/src/widgets/common_screens.dart';
 
-// import 'src/screens/counter_home_screen.dart';
-import 'src/blocs/counter_bloc.dart';
-import 'src/screens/counter_home_screen.dart';
 import 'src/screens/meetup_detail_screen.dart';
 import 'src/screens/posts_screen.dart';
 import 'src/services/auth_service.dart';
@@ -74,13 +72,14 @@ AuthBloc authBloc;
           }
 
           if (state is AuthenticationUnauthenticated) {
-            return LoginScreen('');
+            final LoginArguments arg = !state.logout?ModalRoute.of(context).settings.arguments:null;
+            return LoginScreen(arg?.message);
           }
 
           if (state is AuthenticationLoading) {
             return LoadingScreen();
           }
-          return SplashScreen();
+          // return LoginScreen('');
       }
       
     ),
@@ -93,10 +92,12 @@ AuthBloc authBloc;
       
       if(settings.name == MeetupDetails.route) {
         final MeetupArguments arg = settings.arguments;
-        // return MaterialPageRoute(builder: (context) => MeetupDetails(data: arg?.id));
         return MaterialPageRoute(builder: (context) => BlocProvider<MeetupBloc>(
             bloc: MeetupBloc(),
-            child: MeetupDetails(data: arg?.id),
+            child: BlocProvider<UserBloc> (
+              bloc: UserBloc(auth: AuthProvider()),
+              child: MeetupDetails(data: arg?.id)
+            ),
         ));
       } else if(settings.name == MeetUpHomeScreen.route) {
        return MaterialPageRoute(builder: (context) => BlocProvider<MeetupBloc>(
