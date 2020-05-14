@@ -1,5 +1,7 @@
 
 import 'package:flutter/material.dart';
+import 'package:myhomeapp/src/auth/auth_bloc.dart';
+import 'package:myhomeapp/src/blocs/bloc_provider.dart';
 
 import 'package:myhomeapp/src/model/login_form_data.dart';
 import 'package:myhomeapp/src/screens/meetup_home_screen.dart';
@@ -27,6 +29,8 @@ class LoginScreen extends StatefulWidget {
 
 class LoginScreenState extends State<LoginScreen> {
 
+  AuthBloc authBloc;
+
   BuildContext _scaffoldContext;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final GlobalKey<FormFieldState<String>> _passwordKey = GlobalKey<FormFieldState<String>>();
@@ -37,6 +41,7 @@ class LoginScreenState extends State<LoginScreen> {
   @override
   initState() {
     super.initState();
+    authBloc = BlocProvider.of<AuthBloc>(context);
     WidgetsBinding.instance.addPostFrameCallback((_) => _checkMessage());
   }
 
@@ -119,12 +124,15 @@ class LoginScreenState extends State<LoginScreen> {
   }
 
   void _login() {
+    authBloc.dispatch(InitLogging());
      widget.api
         .login(formData)
         .then((data) {
-            Navigator.pushNamed(context, MeetUpHomeScreen.route);
+            // Navigator.pushNamed(context, MeetUpHomeScreen.route);
+            authBloc.dispatch(LoggedIn());
         })
         .catchError((res) {
+          authBloc.dispatch(LoggedOut());
         Scaffold.of(_scaffoldContext).showSnackBar(SnackBar(
           content: Text(res['errors']['message'])
         ));

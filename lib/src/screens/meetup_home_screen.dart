@@ -1,13 +1,13 @@
 
 
 import 'package:flutter/material.dart';
+import 'package:myhomeapp/src/auth/auth_bloc.dart';
 import 'package:myhomeapp/src/blocs/bloc_provider.dart';
 import 'package:myhomeapp/src/blocs/meetup_bloc.dart';
 import 'package:myhomeapp/src/model/meetup.dart';
-import 'package:myhomeapp/src/screens/login_screen.dart';
 import 'package:myhomeapp/src/screens/meetup_detail_screen.dart';
 import 'package:myhomeapp/src/services/auth_service.dart';
-import 'package:myhomeapp/src/services/meetup_api_service.dart';
+
 
 class MeetupArguments {
   final String id;
@@ -26,21 +26,22 @@ class MeetUpHomeScreen extends StatefulWidget {
 }
 
 class MeetupHome extends State<MeetUpHomeScreen>{
+
+  AuthBloc authBloc;
   void didChangeDependencies() {
     super.didChangeDependencies();
     BlocProvider.of<MeetupBloc>(context).fetchMeetups();
-    // final meetups =BlocProvider.of<MeetupBloc>(context);
-    // meetups.fetchMeetups();
-    // meetups.meetups.listen((data) {
-    //       print(data);
-    // });
-    
   }
 
   @override
+  void initState() {
+    super.initState();
+    authBloc = BlocProvider.of<AuthBloc>(context);
+  }
+  @override
   Widget build(BuildContext context) {
     return Scaffold(body: Center(child: Column(children: <Widget>[
-    Meetuptitle(),
+    Meetuptitle(authBloc: authBloc),
     MeetupCardList()
         ]),
 
@@ -79,7 +80,10 @@ class _MeetupCard extends StatelessWidget {
 
 class Meetuptitle extends StatelessWidget {
 
+    final AuthBloc authBloc;
    final AuthProvider auth = AuthProvider();
+
+   Meetuptitle({this.authBloc});
 
   Widget _buildUserWelcome()  {
     return FutureBuilder<bool>(
@@ -100,7 +104,8 @@ class Meetuptitle extends StatelessWidget {
                 Padding(padding: EdgeInsets.only(left: 20.0),   
                   child: GestureDetector(child: Text('Logout'),onTap: () {
                     auth.logoutUser().then((value) {
-                        Navigator.pushNamedAndRemoveUntil(context, LoginScreen.route, (Route<dynamic> route) => false);
+                      authBloc.dispatch(LoggedOut());
+                      //  Navigator.pushNamedAndRemoveUntil(context, LoginScreen.route, (Route<dynamic> route) => false);
                     });
                    
                   

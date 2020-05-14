@@ -50,7 +50,7 @@ class AuthProvider {
 
    Future<bool> isAuthenticated() async {
     final token = await this.token;
-    if (token.isNotEmpty) {
+    if (token!=null  && token.isNotEmpty) {
       final decodeToken = decode(token);
       final expiry = decodeToken['exp'] * 1000;
       final isValidToken = (expiry>DateTime.now().millisecond);

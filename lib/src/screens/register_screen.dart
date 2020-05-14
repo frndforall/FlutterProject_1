@@ -181,7 +181,7 @@ class RegisterScreenState extends State<RegisterScreen> {
           } else {
             print('failed to register');
           }
-          Navigator.pushNamedAndRemoveUntil(context, LoginScreen.route, (Route<dynamic> route) => false, arguments: LoginArguments(Constants.loginArguments));
+          Navigator.pushNamedAndRemoveUntil(context, "/", (Route<dynamic> route) => false, arguments: LoginArguments(Constants.loginArguments));
         }).catchError((error) {
           // print(error);
            Scaffold.of(_scaffoldContext).showSnackBar(SnackBar(
@@ -205,7 +205,7 @@ class RegisterScreenState extends State<RegisterScreen> {
         children: <Widget>[
           GestureDetector(
             onTap: () {
-              Navigator.pushNamed(context, LoginScreen.route);
+              Navigator.pushNamed(context, '/');
             },
             child: Text(
               'Already Registered? Login Now.',

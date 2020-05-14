@@ -27,6 +27,7 @@ dependencies:
   faker: ^1.2.1
   scoped_model: ^1.0.1
   shared_preferences: ^0.5.7+1
+  rxdart: ^0.24.0
 
 dev_dependencies:
   flutter_test:

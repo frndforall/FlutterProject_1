@@ -1,49 +1,90 @@
 
 
 import 'package:flutter/material.dart';
+import 'package:myhomeapp/src/auth/auth_bloc.dart';
 import 'package:myhomeapp/src/blocs/bloc_provider.dart';
 import 'package:myhomeapp/src/blocs/meetup_bloc.dart';
 import 'package:myhomeapp/src/screens/login_screen.dart';
 import 'package:myhomeapp/src/screens/meetup_home_screen.dart';
 import 'package:myhomeapp/src/screens/register_screen.dart';
+import 'package:myhomeapp/src/widgets/common_screens.dart';
 
 // import 'src/screens/counter_home_screen.dart';
 import 'src/blocs/counter_bloc.dart';
 import 'src/screens/counter_home_screen.dart';
 import 'src/screens/meetup_detail_screen.dart';
 import 'src/screens/posts_screen.dart';
+import 'src/services/auth_service.dart';
 
-void main() => runApp( MyApp());
+void main() => runApp( App());
 
-class MyApp extends StatelessWidget {
+class App extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider<AuthBloc>(child: MyApp(),
+    bloc: AuthBloc(provider: AuthProvider()));
+
+    
+  }
+}
+
+
+class MyApp extends StatefulWidget {
+ 
+  createState() => _MyApp();
+}
+
+
+
+class _MyApp extends State<MyApp> {
 final String title ='Sodhan App';
-  // This widget is the root of your application.
+AuthBloc authBloc;
+  
+  @override
+  void initState() {
+    authBloc = BlocProvider.of<AuthBloc>(context);
+    authBloc.dispatch(AppStarted());
+    super.initState();
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
         title: 'Flutter Demo',
         theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
+
         primarySwatch: Colors.red,
     ),
-    home: CounterBlocProvider(
-        child: Builder(
-          builder: (BuildContext context) {
-            return HomeScreen(title: title,
-                                      counterBloc: CounterBlocProvider.of(context));
+    home: StreamBuilder<AuthenticationState> (
+      initialData: AuthenticationUninitialized(),
+      stream: authBloc.stateStream,
+      builder: (BuildContext context,AsyncSnapshot<AuthenticationState> snapshot) {
+        final state = snapshot.data;
+
+          if (state is AuthenticationUninitialized) {
+            return SplashScreen();
           }
-        )
-      ),
-    // home: PostScreen(),
-    //  home: LoginScreen(''),
+
+          if (state is AuthenticationAuthenticated) {
+            return BlocProvider<MeetupBloc>(
+              bloc: MeetupBloc(),
+              child: MeetUpHomeScreen()
+            );
+          }
+
+          if (state is AuthenticationUnauthenticated) {
+            return LoginScreen('');
+          }
+
+          if (state is AuthenticationLoading) {
+            return LoadingScreen();
+          }
+          return SplashScreen();
+      }
+      
+    ),
+    
     routes: {
       RegisterScreen.route: (context) => RegisterScreen()
     },
@@ -52,7 +93,11 @@ final String title ='Sodhan App';
       
       if(settings.name == MeetupDetails.route) {
         final MeetupArguments arg = settings.arguments;
-        return MaterialPageRoute(builder: (context) => MeetupDetails(data: arg?.id));
+        // return MaterialPageRoute(builder: (context) => MeetupDetails(data: arg?.id));
+        return MaterialPageRoute(builder: (context) => BlocProvider<MeetupBloc>(
+            bloc: MeetupBloc(),
+            child: MeetupDetails(data: arg?.id),
+        ));
       } else if(settings.name == MeetUpHomeScreen.route) {
        return MaterialPageRoute(builder: (context) => BlocProvider<MeetupBloc>(
             bloc: MeetupBloc(),
