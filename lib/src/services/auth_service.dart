@@ -29,6 +29,14 @@ class AuthProvider {
     }
   }
 
+  Future<Map<String,dynamic>> get decodedToken async {
+     final token = await this.token;
+    if (token!=null  && token.isNotEmpty) {
+      return decode(token);
+    }
+     return null;
+  }
+
   Future<bool> _persistToken(token) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.setString('token', token);
@@ -49,19 +57,15 @@ class AuthProvider {
   }
 
    Future<bool> isAuthenticated() async {
-    final token = await this.token;
-    if (token!=null  && token.isNotEmpty) {
-      final decodeToken = decode(token);
-      final expiry = decodeToken['exp'] * 1000;
-      final isValidToken = (expiry>DateTime.now().millisecond);
-      
-      // if(isValidToken) {
-      //   authUser = decodeToken;
-      //   print('token is validated with $expiry');
-      // }
-      return isValidToken;
-    }
+    final decodeToken = await decodedToken;
+    if(decodeToken !=null )
+      return (decodeToken['exp']*1000 > DateTime.now().millisecond);
+
     return false;
+   }
+
+   void initUserFromToken() async{
+     authUser = await decodedToken;
    }
 
   get authUser => _authUser;
@@ -113,6 +117,27 @@ class AuthProvider {
     prefs.remove('token');
     _token = '';
     authUser=null;
+  }
+
+   Future<User> fetchIUserDetails() async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      final token = prefs.getString('token');
+
+      final res = await http.get('$baseUrl/users/me',
+                      headers: {'Authorization': 'Bearer $token'});
+      if(res.statusCode == 200){
+        final decodedToken = Map<String,dynamic>.from(json.decode(res.body));
+        await _saveToken(decodedToken['token']);
+        authUser = decodedToken;
+        return authUser;
+      } else {
+
+      }
+    } catch(e) {
+      await _removeUserDetails();
+      throw Exception('Cannot fetch user');
+    }
   }
 
 
