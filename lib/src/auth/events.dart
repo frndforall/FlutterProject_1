@@ -16,6 +16,9 @@ class LoggedIn extends AuthenticationEvent {
 }
 
 class LoggedOut extends AuthenticationEvent {
+  final String message;
+
+  LoggedOut({this.message});
   @override
   String toString() => 'LoggedOut';
 }

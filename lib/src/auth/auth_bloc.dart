@@ -37,7 +37,7 @@ class AuthBloc extends BlocBase {
           print(event);
           // provider.initUserFromToken();
           await provider.fetchIUserDetails().catchError((onError) {
-              dispatch(LoggedOut());
+              dispatch(LoggedOut(message:'Invalid User. Please Login again.'));
           });
 
           yield AuthenticationAuthenticated();
@@ -54,7 +54,7 @@ class AuthBloc extends BlocBase {
       }
 
       if (event is LoggedOut) {
-        yield AuthenticationUnauthenticated();
+        yield AuthenticationUnauthenticated(logout: true, message: event.message);
       }
   
   }

@@ -72,8 +72,10 @@ AuthBloc authBloc;
           }
 
           if (state is AuthenticationUnauthenticated) {
-            final LoginArguments arg = !state.logout?ModalRoute.of(context).settings.arguments:null;
-            return LoginScreen(arg?.message);
+            final LoginArguments arg = ModalRoute.of(context).settings.arguments;
+            final text = state.message ?? arg?.message;
+            state.message = null;
+            return LoginScreen(text);
           }
 
           if (state is AuthenticationLoading) {
@@ -190,7 +192,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             Text(
               '$_counter',
-              style: Theme.of(context).textTheme.body1,
+              style: Theme.of(context).textTheme.bodyText1,
             ),
             Text('Checking the text direction',textDirection: TextDirection.rtl),
             RaisedButton(onPressed: _incrementCounter, key: Key('Value'))

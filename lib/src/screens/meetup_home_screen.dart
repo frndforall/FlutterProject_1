@@ -7,6 +7,7 @@ import 'package:myhomeapp/src/blocs/meetup_bloc.dart';
 import 'package:myhomeapp/src/model/meetup.dart';
 import 'package:myhomeapp/src/screens/meetup_detail_screen.dart';
 import 'package:myhomeapp/src/services/auth_service.dart';
+import 'package:myhomeapp/utils/constants.dart';
 
 
 class MeetupArguments {
@@ -104,8 +105,7 @@ class Meetuptitle extends StatelessWidget {
                 Padding(padding: EdgeInsets.only(left: 20.0),   
                   child: GestureDetector(child: Text('Logout'),onTap: () {
                     auth.logoutUser().then((value) {
-                      authBloc.dispatch(LoggedOut());
-                      //  Navigator.pushNamedAndRemoveUntil(context, LoginScreen.route, (Route<dynamic> route) => false);
+                      authBloc.dispatch(LoggedOut(message: Constants.logoutText));
                     });
                    
                   

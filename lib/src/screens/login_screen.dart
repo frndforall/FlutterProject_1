@@ -84,7 +84,7 @@ class LoginScreenState extends State<LoginScreen> {
                                    [requiredValidator, minLengthValidator, emailValidator]);
                   
                 },
-                style: Theme.of(context).textTheme.subhead,
+                style: Theme.of(context).textTheme.subtitle1,
                 decoration: InputDecoration(
                   hintText: 'Email Address'
                 ),
@@ -98,7 +98,7 @@ class LoginScreenState extends State<LoginScreen> {
                                    'password',
                                    [requiredValidator, minLengthValidator]);
                 },
-                style: Theme.of(context).textTheme.subhead,
+                style: Theme.of(context).textTheme.subtitle1,
                 decoration: InputDecoration(
                   hintText: 'Password'
                 ),
@@ -132,10 +132,9 @@ class LoginScreenState extends State<LoginScreen> {
             authBloc.dispatch(LoggedIn());
         })
         .catchError((res) {
-          authBloc.dispatch(LoggedOut());
-        Scaffold.of(_scaffoldContext).showSnackBar(SnackBar(
-          content: Text(res['errors']['message'])
-        ));
+          print(res);
+          authBloc.dispatch(LoggedOut(message: res['errors']['message']));
+       
       });
   }
 
