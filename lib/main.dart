@@ -6,6 +6,7 @@ import 'package:myhomeapp/src/blocs/bloc_provider.dart';
 import 'package:myhomeapp/src/blocs/meetup_bloc.dart';
 import 'package:myhomeapp/src/blocs/user_blocs/user_bloc.dart';
 import 'package:myhomeapp/src/screens/login_screen.dart';
+import 'package:myhomeapp/src/screens/meetup_create_screen.dart';
 import 'package:myhomeapp/src/screens/meetup_home_screen.dart';
 import 'package:myhomeapp/src/screens/register_screen.dart';
 import 'package:myhomeapp/src/widgets/common_screens.dart';
@@ -87,7 +88,8 @@ AuthBloc authBloc;
     ),
     
     routes: {
-      RegisterScreen.route: (context) => RegisterScreen()
+      RegisterScreen.route: (context) => RegisterScreen(),
+       MeetupCreateScreen.route: (context) => MeetupCreateScreen()
     },
 
     onGenerateRoute:(RouteSettings settings) {

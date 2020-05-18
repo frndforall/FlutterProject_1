@@ -1,3 +1,5 @@
+import 'package:myhomeapp/src/model/category.dart';
+
 class LoginFormData {
   String email ="";
   String pass = "";
@@ -24,5 +26,30 @@ class RegisterFormData {
       'password': password,
       'passwordConfirmation': passwordConfirmation,
       'avatar': avatar
+    };
+}
+
+class MeetupFormData {
+  String location = '';
+  String title = '';
+  DateTime startDate = DateTime.now();
+  Category category;
+  String image = '';
+  String shortInfo = '';
+  String description = '';
+  String timeTo = '';
+  String timeFrom = '';
+
+  Map<String, dynamic> toJSON() =>
+    {
+      'location': location,
+      'title': title,
+      'startDate': startDate,
+      'category': category,
+      'image': image,
+      'shortInfo': shortInfo,
+      'description': description,
+      'timeTo': timeTo,
+      'timeFrom': timeFrom
     };
 }

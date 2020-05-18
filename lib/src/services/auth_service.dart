@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
+import 'package:myhomeapp/src/model/category.dart';
 import 'package:myhomeapp/src/model/login_form_data.dart';
 import 'package:myhomeapp/src/model/user.dart';
 import 'package:myhomeapp/utils/jwt_utils.dart';
@@ -71,34 +72,34 @@ class AuthProvider {
   get authUser => _authUser;
 
    Future<Map<String, dynamic>> login(LoginFormData loginData) async {
-    final body = json.encode(loginData.toJson());
-    
-    final res = await http.post('$baseUrl/users/login', 
-    headers: {"Content-type":"application/json"},
-    body: body);
+      final body = json.encode(loginData.toJson());
+      
+      final res = await http.post('$baseUrl/users/login', 
+      headers: {"Content-type":"application/json"},
+      body: body);
 
-    final parsedData = Map<String,dynamic>.from(json.decode(res.body));
-    if(res.statusCode == 200) {
-      _saveToken(parsedData['token']);
-      authUser = parsedData;
-      return parsedData;
-    } else {
-      return Future.error(parsedData);
-    }
+      final parsedData = Map<String,dynamic>.from(json.decode(res.body));
+      if(res.statusCode == 200) {
+        _saveToken(parsedData['token']);
+        authUser = parsedData;
+        return parsedData;
+      } else {
+        return Future.error(parsedData);
+      }
   }
 
    Future<bool> register(RegisterFormData data) async {
-     print(data.toJSON());
-    final body = json.encode(data.toJSON());
-    final res = await http.post('$baseUrl/users/register', 
-    headers: {"Content-type":"application/json"},
-    body: body);
-    final parsedData = Map<String,dynamic>.from(json.decode(res.body));
-    if(res.statusCode == 200) {
-      return true;
-    } else {
-      return Future.error(parsedData);
-    }
+        print(data.toJSON());
+        final body = json.encode(data.toJSON());
+        final res = await http.post('$baseUrl/users/register', 
+        headers: {"Content-type":"application/json"},
+        body: body);
+        final parsedData = Map<String,dynamic>.from(json.decode(res.body));
+        if(res.statusCode == 200) {
+          return true;
+        } else {
+          return Future.error(parsedData);
+        }
   }
 
   Future<bool> logoutUser() async{
@@ -138,6 +139,17 @@ class AuthProvider {
       await _removeUserDetails();
       throw Exception('Cannot fetch user');
     }
+  }
+
+  Future<List<Category>> getCategories() async {
+    final res = await http.get('$baseUrl/categories');
+    if(res.statusCode == 200) {
+     final List<dynamic> parsedValues = json.decode(res.body);
+      return parsedValues.map((parsedValues){
+          return Category.fromJSON(parsedValues);
+      }).toList();
+    }
+
   }
 
 

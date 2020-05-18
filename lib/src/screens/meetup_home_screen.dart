@@ -5,6 +5,7 @@ import 'package:myhomeapp/src/auth/auth_bloc.dart';
 import 'package:myhomeapp/src/blocs/bloc_provider.dart';
 import 'package:myhomeapp/src/blocs/meetup_bloc.dart';
 import 'package:myhomeapp/src/model/meetup.dart';
+import 'package:myhomeapp/src/screens/meetup_create_screen.dart';
 import 'package:myhomeapp/src/screens/meetup_detail_screen.dart';
 import 'package:myhomeapp/src/services/auth_service.dart';
 import 'package:myhomeapp/utils/constants.dart';
@@ -47,7 +48,12 @@ class MeetupHome extends State<MeetUpHomeScreen>{
         ]),
 
       ),
-    appBar: AppBar(title: Text('Meetup Home')));
+    appBar: AppBar(title: Text('Meetup Home')),
+    floatingActionButton: FloatingActionButton(child: Icon(Icons.add),onPressed: (){
+        Navigator.pushNamed(context, MeetupCreateScreen.route);
+    })
+    );
+  
   }
 
 }
