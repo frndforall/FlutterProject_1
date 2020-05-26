@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 import 'package:myhomeapp/src/model/category.dart';
 
 import 'package:myhomeapp/src/model/login_form_data.dart';
@@ -210,6 +211,7 @@ class _DatePickerState extends State<_DatePicker> {
   DateTime _dateNow = DateTime.now();
   DateTime _initialDate = DateTime.now();
   final TextEditingController editController = TextEditingController();
+  final _dateFormat = DateFormat('MM/dd/yyy');
 
   Future<Null> _selectDate(BuildContext context) async {
     final DateTime picked = await showDatePicker(
@@ -219,7 +221,7 @@ class _DatePickerState extends State<_DatePicker> {
         lastDate: DateTime(_dateNow.year + 1, _dateNow.month, _dateNow.day));
     if (picked != null && picked != _initialDate)
       setState(() {
-        editController.text = picked.toString();
+        editController.text =_dateFormat.format(picked);
         _initialDate = picked;
         
       }

@@ -46,7 +46,7 @@ class RegisterScreenState extends State<RegisterScreen> {
                 children: [
                   _buildTitle(),
                   TextFormField(
-                    style: Theme.of(context).textTheme.headline,
+                    style: Theme.of(context).textTheme.bodyText1,
                     decoration: InputDecoration(
                       hintText: 'Name',
                     ),
@@ -62,7 +62,7 @@ class RegisterScreenState extends State<RegisterScreen> {
                     // 7. onSaved - save data to registerFormData
                   ),
                   TextFormField(
-                    style: Theme.of(context).textTheme.headline,
+                    style: Theme.of(context).textTheme.bodyText1,
                     decoration: InputDecoration(
                       hintText: Constants.username,
                     ),
