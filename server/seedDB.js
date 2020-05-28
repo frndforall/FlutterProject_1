@@ -4,6 +4,7 @@ const User = require('./models/users');
 const Post = require('./models/posts');
 const Thread = require('./models/threads');
 const Category = require('./models/categories')
+const Employee = require('./models/employee')
 
 const data = require('./data.js');
 const config = require('./config');
@@ -15,7 +16,8 @@ class DB {
     this.threads = data.threads;
     this.posts = data.posts;
     this.categories = data.categories;
-    this.models = [Meetup, User, Post, Thread, Category];
+	this.employees = data.employees;
+    this.models = [Meetup, User, Post, Thread, Category, Employee];
   }
 
   async cleanDb() {
@@ -45,6 +47,10 @@ class DB {
 
     await this.posts.forEach(async post => {
       await (new Post(post)).save(() => {})
+    })
+	
+	await this.employees.forEach(async employee => {
+      await (new Employee(employee)).save(() => {})
     })
 
     console.log('Database Populated!');

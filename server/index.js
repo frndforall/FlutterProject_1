@@ -12,7 +12,7 @@ require("./models/users");
 require("./models/threads");
 require("./models/posts");
 require("./models/categories");
-
+require("./models/employee");
 require("./services/passport");
 
 const meetupsRoutes = require('./routes/meetups'),
@@ -20,6 +20,7 @@ const meetupsRoutes = require('./routes/meetups'),
       threadsRoutes = require('./routes/threads'),
       postsRoutes = require('./routes/posts'),
       categoriesRoutes = require('./routes/categories'),
+	  employeeRoutes = require('./routes/employee'),
       apiRoutes = require('./routes/api');
 
 mongoose.connect(config.DB_URI, { useNewUrlParser: true })
@@ -41,6 +42,7 @@ app.use('/api/v1/users', usersRoutes);
 app.use('/api/v1/posts', postsRoutes);
 app.use('/api/v1/threads', threadsRoutes);
 app.use('/api/v1/categories', categoriesRoutes);
+app.use('/api/v1/employees', employeeRoutes);
 
 const PORT = process.env.PORT || 3001;
 

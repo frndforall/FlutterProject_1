@@ -38,6 +38,13 @@ const category4Id = mongoose.Types.ObjectId();
 const category5Id = mongoose.Types.ObjectId();
 const category6Id = mongoose.Types.ObjectId();
 
+const employee1Id = mongoose.Types.ObjectId();
+const employee2Id = mongoose.Types.ObjectId();
+const employee3Id = mongoose.Types.ObjectId();
+const employee4Id = mongoose.Types.ObjectId();
+const employee5Id = mongoose.Types.ObjectId();
+const employee6Id = mongoose.Types.ObjectId();
+
 module.exports = {
   "meetups": [
      {
@@ -337,6 +344,14 @@ module.exports = {
       "thread": thread5Id,
       "user": user3Id,
     }
+  ],
+  "employees" :[
+  {"id":employee1Id,"name":"Tiger Nixon","email":"test1@gmail.com","salary":"320800","age":"61"},
+  {"id":employee2Id,"name":"Garrett Winters","email":"test2@gmail.com","salary":"170750","age":"63"},
+  {"id":employee3Id,"name":"Ashton Cox","email":"test3@gmail.com","salary":"86000","age":"65"},
+  {"id":employee4Id,"name":"Cedric Kelly","email":"test4@gmail.com","salary":"433060","age":"45"},
+  {"id":employee5Id,"name":"Airi Satou","email":"test5@gmail.com","salary":"162700","age":"33"},
+  {"id":employee6Id,"name":"Brielle Williamson","email":"test6@gmail.com","salary":"372000","age":"61"},
   ],
   "categories": [
     {
